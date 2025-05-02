@@ -36,12 +36,15 @@ def data_filename_from_parameters(
         f"-{voter_model}-with-approvalradius-{approval_radius}.pickle"
     )
 
+
 def datafile_exists_or_in_progress(data_filename):
-    return path.exists(data_filename) or path.exists(data_filename+".lock")
+    return path.exists(data_filename) or path.exists(data_filename + ".lock")
+
 
 def create_lock(data_filename):
-    with open(data_filename+".lock", "w") as f:
+    with open(data_filename + ".lock", "w") as f:
         f.write("")
+
 
 def computation_done(data_filename, data):
     assert not path.exists(data_filename)
@@ -372,7 +375,6 @@ def run_specific_experiment(
                     continue
                 results[rule_index][key][freerider] /= len(miprofs)
     return results
-
 
 
 def different_rules():
