@@ -65,6 +65,7 @@ def _freeriding_possible_for_specific_voter_single_issue(
     num_freeriding_pos = 0
     num_freeriding_neg = 0
     delta_satisfaction = 0
+    freeriding_per_issue = []
     satisfaction = sum(
         1
         for issue_index, winner in enumerate(outcome)
@@ -73,6 +74,7 @@ def _freeriding_possible_for_specific_voter_single_issue(
     for issue_index, issue in enumerate(profile.issues):
         winner = outcome[issue_index]
         if winner not in issue[voter_index].approved:
+            freeriding_per_issue.append(None)
             continue
 
         # voter is satisfied by this issue --> free-riding?
@@ -90,6 +92,7 @@ def _freeriding_possible_for_specific_voter_single_issue(
         new_outcome = rule(profile, weights)
         issue[voter_index] = Voter(orig_ballot)
         if not freeriding_possible:
+            freeriding_per_issue.append(None)
             continue
 
         assert winner in profile.issues[issue_index][voter_index].approved
@@ -103,6 +106,7 @@ def _freeriding_possible_for_specific_voter_single_issue(
         if new_satisfaction < satisfaction:
             num_freeriding_neg += 1
         delta_satisfaction += new_satisfaction - satisfaction
+        freeriding_per_issue.append(delta_satisfaction)
         num_freeriding += 1
     if num_freeriding_neg + num_freeriding_pos > 0:
         risk = num_freeriding_neg / (num_freeriding_neg + num_freeriding_pos)
@@ -120,6 +124,7 @@ def _freeriding_possible_for_specific_voter_single_issue(
         "risk": risk,
         "satisfaction": satisfaction,
         "delta_satisfaction": delta_satisfaction,
+        "freeriding_per_issue": freeriding_per_issue,
     }
 
 
