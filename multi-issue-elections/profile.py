@@ -33,7 +33,8 @@ class MultiIssueProfile:
         cands = set()
         for s in approval_profile:
             cands.update(s)
-        issue = ApprovalProfile(num_cand=max(cands) + 1)
+        num_cand = max(max(cands) + 1, 2)  # at least two candidates
+        issue = ApprovalProfile(num_cand)
         issue.add_voters(approval_profile)
         self.issues.append(issue)
 
